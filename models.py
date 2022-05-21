@@ -51,7 +51,7 @@ class Encoder(nn.Module):
         for i,j in self.mobile_net.features._modules.items(): features.append(j[features[-1]])
         return features
 
-class Decoder(nn.Module):
+class model(nn.Module):
     def __init__(self):
         super(Decoder, self).__init__()
         self.encoder = Encoder()

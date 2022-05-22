@@ -13,7 +13,7 @@ class upSample(nn.Sequential):
         self.Lrelu2 = nn.LeakyReLU(0.2)
     
     def forward(self, x , cWidth):
-        upX = F.interpolate(x, size=[cWidth.size(2), cWidth.size(3)], mode='bilinear', align_corner=True)
+        upX = F.interpolate(x, size=[cWidth.size(2), cWidth.size(3)], mode='bilinear', align_corners=True)
         return self.Lrelu2(self.conv2(self.conv1(torch.cat([upX,cWidth ], dim=1))))
 
 class Decoder(nn.Module):
@@ -48,12 +48,13 @@ class Encoder(nn.Module):
 
     def forward(self, x):
         features = [x]
-        for i,j in self.mobile_net.features._modules.items(): features.append(j[features[-1]])
+        for i,j in self.mobile_net.features._modules.items():
+            features.append(j(features[-1]))
         return features
 
-class model(nn.Module):
+class Model(nn.Module):
     def __init__(self):
-        super(Decoder, self).__init__()
+        super(Model, self).__init__()
         self.encoder = Encoder()
         self.decoder = Decoder()
 

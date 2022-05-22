@@ -1,3 +1,4 @@
+from itertools import permutations
 import mat73
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
@@ -28,8 +29,9 @@ class Depthset(Dataset):
         return sample
 
 class Agument(object):
-    def __init__(self):
-        pass
+    def __init__(self,probability):
+        self.perms = list(permutations(range(3),3))
+        self.prob = probability
 
     def __call__(self,sample):
         image,depth = sample['image'], sample['depth']
@@ -47,6 +49,9 @@ class Agument(object):
             1:np.fliplr(depth),
             2:np.flipud(depth)
         }[alt_method]
+
+        if random.random() < self.prob:
+            image = image[...,list(self.perms[random.randint(0, len(self.perms) -1)])]
 
         sample = {"image":image,"depth":depth}
 

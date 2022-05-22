@@ -58,7 +58,7 @@ class Agument(object):
         return sample
 
 class toTensor(object):
-    def __init__(self,downscale=4):
+    def __init__(self,downscale=2):
         self.downscale = downscale
 
     def __call__(self, sample):

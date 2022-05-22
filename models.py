@@ -17,16 +17,16 @@ class upSample(nn.Sequential):
         return self.Lrelu2(self.conv2(self.conv1(torch.cat([upX,cWidth ], dim=1))))
 
 class Decoder(nn.Module):
-    def __init__(self, n_feat=1664, decoder_w = 1.0):
+    def __init__(self, n_feat=2208, decoder_w = 0.25):
         super(Decoder, self).__init__()
         feat = int(n_feat*decoder_w)
 
         self.conv2 = nn.Conv2d(n_feat, feat, kernel_size=1, stride=1, padding=0)
 
-        self.up_1 = upSample(sInputs=feat//1+256, output=feat//2)
-        self.up_2 = upSample(sInputs=feat//2+128, output=feat//4)
-        self.up_3 = upSample(sInputs=feat//4+64, output=feat//8)
-        self.up_4 = upSample(sInputs=feat//8+64, output=feat//16)
+        self.up_1 = upSample(sInputs=feat//1+384, output=feat//2)
+        self.up_2 = upSample(sInputs=feat//2+192, output=feat//4)
+        self.up_3 = upSample(sInputs=feat//4+96, output=feat//8)
+        self.up_4 = upSample(sInputs=feat//8+96, output=feat//16)
 
         self.conv3 = nn.Conv2d(feat//16,1, kernel_size=3, stride=1, padding=1)
 
@@ -44,7 +44,7 @@ class Decoder(nn.Module):
 class Encoder(nn.Module):
     def __init__(self):
         super(Encoder, self).__init__()
-        self.mobile_net = models.densenet169(pretrained=True)
+        self.mobile_net = models.densenet161(pretrained=True)
 
     def forward(self, x):
         features = [x]

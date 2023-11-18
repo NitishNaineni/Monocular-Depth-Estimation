@@ -78,5 +78,4 @@ class toTensor(object):
             img = img[...,np.newaxis]
 
         img = torch.from_numpy(np.ascontiguousarray(img.transpose((2, 0, 1))))
-
         return img.float().div(255)
